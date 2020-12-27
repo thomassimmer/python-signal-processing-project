@@ -1,6 +1,26 @@
-testpy36:
+testpython36:
   image: python:3.6
   script:
   - apt-get update -qy
   - pip install .
-  - python -m unittest
+  - python modulation.py
+  - cd tests/
+  - python -m unittest test_amplitude_demodulation.py
+  - cd ..
+  - python demodulation.py
+  - cd tests/
+  - python -m unittest test_amplitude_modulation.py
+  
+testpython35:
+  image: python:3.5
+  script:
+  - apt-get update -qy
+  - pip install .
+  - python modulation.py
+  - cd tests/
+  - python -m unittest test_amplitude_demodulation.py
+  - cd ..
+  - python demodulation.py
+  - cd tests/
+  - python -m unittest test_amplitude_modulation.py
+  
