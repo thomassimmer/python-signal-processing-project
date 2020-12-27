@@ -7,7 +7,6 @@ class TestAmplitudeModulation(unittest.TestCase):
 
     def test_check_existance_files(self):
         CWD = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-        print(CWD)
         self.assertEqual( os.path.exists(CWD + '/results/message.wav'), 1)
         self.assertEqual( os.path.exists(CWD + '/results/modulatedSignal.wav'), 1)
         self.assertEqual( os.path.exists(CWD + '/results/modulation.png'), 1)

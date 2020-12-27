@@ -6,11 +6,11 @@ testpython36:
   - mkdir results
   - python modulation.py
   - cd tests/
-  - python -m unittest test_amplitude_demodulation.py
+  - python -m unittest test_amplitude_modulation.py
   - cd ..
   - python demodulation.py
   - cd tests/
-  - python -m unittest test_amplitude_modulation.py
+  - python -m unittest test_amplitude_demodulation.py
   
 testpython35:
   image: python:3.5
@@ -20,9 +20,9 @@ testpython35:
   - mkdir results
   - python modulation.py
   - cd tests/
-  - python -m unittest test_amplitude_demodulation.py
+  - python -m unittest test_amplitude_modulation.py
   - cd ..
   - python demodulation.py
   - cd tests/
-  - python -m unittest test_amplitude_modulation.py
+  - python -m unittest test_amplitude_demodulation.py
   
