@@ -1,0 +1,6 @@
+testpy36:
+  image: python:3.6
+  script:
+  - apt-get update -qy
+  - pip install .
+  - python -m unittest
