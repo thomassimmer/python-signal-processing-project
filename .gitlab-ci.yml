@@ -3,6 +3,7 @@ testpython36:
   script:
   - apt-get update -qy
   - pip install .
+  - mkdir results
   - python modulation.py
   - cd tests/
   - python -m unittest test_amplitude_demodulation.py
@@ -16,6 +17,7 @@ testpython35:
   script:
   - apt-get update -qy
   - pip install .
+  - mkdir results
   - python modulation.py
   - cd tests/
   - python -m unittest test_amplitude_demodulation.py
