@@ -7,6 +7,7 @@ testpython36:
   - mkdir results/AM
   - mkdir results/BPSK
   - mkdir results/QPSK
+  - mkdir results/32APSK
   - python -m unittest discover
   
 testpython35:
@@ -18,5 +19,6 @@ testpython35:
   - mkdir results/AM
   - mkdir results/BPSK
   - mkdir results/QPSK
+  - mkdir results/32APSK
   - python -m unittest discover
   
