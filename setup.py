@@ -1,5 +1,5 @@
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='python-test-project',
@@ -15,6 +15,7 @@ setup(
         "Programming Language :: Python :: 3.6",
     ],
     keywords="python scipy numpy",
+    packages=find_packages(),
     install_requires=[
         'numpy',
         'scipy',

@@ -36,8 +36,8 @@ modulator_spectrum = np.fft.fft(modulator)/len(modulator)
 product_spectrum = np.fft.fft(product)/len(product)
 
 # Write wav files
-write("results/message.wav", samplingRate, modulator)
-write("results/modulatedSignal.wav", samplingRate, product)
+write("results/AM/message.wav", samplingRate, modulator)
+write("results/AM/modulatedSignal.wav", samplingRate, product)
 
 # Show plots
 plt.subplot(3,2,1)
@@ -77,4 +77,4 @@ fig = plt.gcf()
 
 # Save plot
 # plt.show()
-fig.savefig('results/modulation.png', dpi=100)
+fig.savefig('results/AM/modulation.png', dpi=100)

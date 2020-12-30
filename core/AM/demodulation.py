@@ -2,14 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io.wavfile import read, write
 
-import filters
+from core.utils import filters
 
 # Carrier wave c(t)=A_c*cos(2*pi*f_c*t)
 # Modulating wave m(t)=A_m*cos(2*pi*f_m*t)
 # Modulated wave s(t)=A_c[1+mu*cos(2*pi*f_m*t)]cos(2*pi*f_c*t)
 
 # Convert modulated signal to array
-samplingRate, signal = read("results/modulatedSignal.wav")
+samplingRate, signal = read("results/AM/modulatedSignal.wav")
 
 # Variables for signal characterization
 A_c = 1
@@ -36,7 +36,7 @@ signal_band_pass = filters.butter_bandpass_filter(signal, 19800, 20200, 44100)
 signal_carrier = filters.butter_bandpass_filter(signal, 19950, 20050, 44100)
 multiplied_signal = signal_band_pass * signal_carrier
 
-# We apply lowpass filter to the multiplied signal
+# We apply highpass filter to the carrier and keep only the modulator signal
 signal_demodulated = filters.butter_highpass_filter(multiplied_signal, 50, 44100)
 
 # Generate spectra
@@ -45,7 +45,7 @@ signal_demodulated_spectrum = np.fft.fft(signal_demodulated)/len(signal_demodula
 signal_spectrum = np.fft.fft(signal)/len(signal)
 
 # Write wav files
-write("results/demodulatedSignal.wav", samplingRate, signal_demodulated)
+write("results/AM/demodulatedSignal.wav", samplingRate, signal_demodulated)
 
 # Show plots
 plt.subplot(3, 2, 1)
@@ -86,4 +86,4 @@ fig = plt.gcf()
 
 # Save plot
 # plt.show()
-fig.savefig('results/demodulation.png', dpi=100)
+fig.savefig('results/AM/demodulation.png', dpi=100)
