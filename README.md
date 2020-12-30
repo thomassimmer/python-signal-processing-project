@@ -1,2 +1,1 @@
-# sample-data-repo
-
+# A Python project to understand signal processing basics.

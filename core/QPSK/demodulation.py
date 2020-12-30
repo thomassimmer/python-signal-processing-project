@@ -9,7 +9,7 @@ from core.utils import filters, helpers
 # Modulated wave s(t)=A_c * cos(2*pi*f_c*t) * [1+m*m(t)]
 
 # Convert modulated signal to array
-samplingRate, signal = read("results/BPSK/modulatedSignal.wav")
+samplingRate, signal = read("results/QPSK/modulatedSignal.wav")
 
 # Variables for signal characterization
 A_c = 1
@@ -55,7 +55,11 @@ k = 0
 symbols, paths = [], []
 I_values, Q_values = [], []
 bits_received = []
-threshold_radius = 0.4
+threshold_radius = 0.3
+symbol_for_11 = np.exp(1j * (np.pi / 4))
+symbol_for_01 = np.exp(1j * (3 * np.pi / 4))
+symbol_for_00 = np.exp(1j * (-3 * np.pi / 4))
+symbol_for_10 = np.exp(1j * (- np.pi / 4))
 symbol_for_1 = np.exp(1j * 0)
 symbol_for_0 = np.exp(1j * (- np.pi))
 for i, time in enumerate(t):
@@ -75,9 +79,21 @@ for i, time in enumerate(t):
         I_values, Q_values = [], []
         # Check distance to symbols
         if (np.linalg.norm(symbol_for_0 - symbols[-1]) < threshold_radius):
-            bits_received.append(0)
+            bits_received.append('0')
         elif (np.linalg.norm(symbol_for_1 - symbols[-1]) < threshold_radius):
-            bits_received.append(1)
+            bits_received.append('1')
+        elif (np.linalg.norm(symbol_for_00 - symbols[-1]) < threshold_radius):
+            bits_received.append('0')
+            bits_received.append('0')
+        elif (np.linalg.norm(symbol_for_01 - symbols[-1]) < threshold_radius):
+            bits_received.append('0')
+            bits_received.append('1')
+        elif (np.linalg.norm(symbol_for_10 - symbols[-1]) < threshold_radius):
+            bits_received.append('1')
+            bits_received.append('0')
+        elif (np.linalg.norm(symbol_for_11 - symbols[-1]) < threshold_radius):
+            bits_received.append('1')
+            bits_received.append('1')
 
 # Generate spectra
 signal_carrier_spectrum = np.fft.fft(signal_carrier)/len(signal_carrier)
@@ -85,11 +101,11 @@ signal_demodulated_spectrum = np.fft.fft(signal_demodulated)/len(signal_demodula
 signal_spectrum = np.fft.fft(signal_band_pass)/len(signal_band_pass)
 
 # Write wav files
-write("results/BPSK/demodulatedSignal.wav", samplingRate, signal_demodulated)
+write("results/QPSK/demodulatedSignal.wav", samplingRate, signal_demodulated)
 
 # Show plots
 plt.subplot(3, 2, 1)
-plt.title('BPSK Demodulation')
+plt.title('QPSK Demodulation')
 plt.plot(t, signal_demodulated, 'g')
 # plt.plot(t, I,'b')
 # plt.plot(t, Q,'r')
@@ -128,7 +144,7 @@ fig = plt.gcf()
 
 # Save plot
 # plt.show()
-fig.savefig('results/BPSK/demodulation.png', dpi=100)
+fig.savefig('results/QPSK/demodulation.png', dpi=100)
 
 # SYMBOLS
 fig2 = plt.figure(2)
@@ -146,15 +162,20 @@ x1 = symbol_for_0.real + r*np.cos(theta)
 x2 = symbol_for_0.imag + r*np.sin(theta)
 x3 = symbol_for_1.real + r*np.cos(theta)
 x4 = symbol_for_1.imag + r*np.sin(theta)
-plt.plot(x1, x2, 'black')
-plt.plot(x3, x4, 'black')
+
+plt.plot(symbol_for_0.real + r*np.cos(theta), symbol_for_0.imag + r*np.sin(theta), 'black')
+plt.plot(symbol_for_1.real + r*np.cos(theta), symbol_for_1.imag + r*np.sin(theta), 'black')
+plt.plot(symbol_for_11.real + r*np.cos(theta), symbol_for_11.imag + r*np.sin(theta), 'black')
+plt.plot(symbol_for_10.real + r*np.cos(theta), symbol_for_10.imag + r*np.sin(theta), 'black')
+plt.plot(symbol_for_01.real + r*np.cos(theta), symbol_for_01.imag + r*np.sin(theta), 'black')
+plt.plot(symbol_for_00.real + r*np.cos(theta), symbol_for_00.imag + r*np.sin(theta), 'black')
 plt.ylabel('Imaginary')
 plt.xlabel('Real')
 
 # plt.show()
-fig2.savefig('results/BPSK/received_symbols.png', dpi=100)
+fig2.savefig('results/QPSK/received_symbols.png', dpi=100)
 
 # print("Number of bits received : ", len(bits_received))
-# print("Bits received : ", "".join([str(i) for i in bits_received] ))
+# print("Bits received : ", ''.join([str(i) for i in bits_received]))
 decoded_message = helpers.frombits(bits_received)
 # print("The message emitted was : ", decoded_message)

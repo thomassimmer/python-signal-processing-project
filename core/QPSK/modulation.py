@@ -22,7 +22,7 @@ modulation_index = 2
 # Variables for sampling
 samplingRate = 44100
 beginTime = 0
-endTime = 2
+endTime = 1
 samplingInterval = 1 / samplingRate
 t = np.arange(beginTime, endTime, samplingInterval)
 
@@ -35,7 +35,7 @@ f = values/timePeriod
 carrier = A_c*np.cos(2*np.pi*f_c*t)
 
 # Generate bits from message
-message_to_transmit = "Hello The World ! BPSK is great. "
+message_to_transmit = "Hello The World ! QPSK is great. "
 bits_to_transmit =  helpers.tobits(message_to_transmit)
 # print("Message to transmit : ", message_to_transmit)
 # print("Number of bits to transmit : ", len(bits_to_transmit))
@@ -45,19 +45,42 @@ bits_to_transmit =  helpers.tobits(message_to_transmit)
 I, Q, I_channel, Q_channel = [], [], [], []
 
 # Generate symbols
+symbol_for_11 = np.exp(1j * (np.pi / 4))
+symbol_for_01 = np.exp(1j * (3 * np.pi / 4))
+symbol_for_00 = np.exp(1j * (-3 * np.pi / 4))
+symbol_for_10 = np.exp(1j * (- np.pi / 4))
 symbol_for_1 = np.exp(1j * 0)
 symbol_for_0 = np.exp(1j * (- np.pi))
 k = 0
 for i in t:
     # apply phase shift of PI every T if bit == 0
     if (i < (k + 1) * T_m):
-        if (len(bits_to_transmit) > k):
-            if (bits_to_transmit[k] == 1):                
-                I.append(symbol_for_1.real)
-                Q.append(symbol_for_1.imag)
+        if ( int(len(bits_to_transmit) / 2) + 1 > k):
+            # Catch 2 bits from the list of bits to transmit
+            if (len(bits_to_transmit) > 2 * k + 1):
+                bits_to_encode = ''.join([str(i) for i in bits_to_transmit[2 * k : 2 * k + 2]])
+            # If number of bits is even, we use BPSK for the last one
             else:
+                bits_to_encode = str(bits_to_transmit[-1])
+
+            if (bits_to_encode == '11'):                
+                I.append(symbol_for_11.real)
+                Q.append(symbol_for_11.imag)
+            elif (bits_to_encode == '01'):                
+                I.append(symbol_for_01.real)
+                Q.append(symbol_for_01.imag)
+            elif (bits_to_encode == '00'):                
+                I.append(symbol_for_00.real)
+                Q.append(symbol_for_00.imag)
+            elif (bits_to_encode == '10'):                
+                I.append(symbol_for_10.real)
+                Q.append(symbol_for_10.imag)
+            elif (bits_to_encode == '0'): 
                 I.append(symbol_for_0.real)
                 Q.append(symbol_for_0.imag)
+            elif (bits_to_encode == '1'):                
+                I.append(symbol_for_1.real)
+                Q.append(symbol_for_1.imag)
         else:
             I.append(0)
             Q.append(0)
@@ -88,12 +111,12 @@ modulator_spectrum = np.fft.fft(modulator)/len(modulator)
 product_spectrum = np.fft.fft(product)/len(product)
 
 # Write wav files
-write("results/BPSK/message.wav", samplingRate, modulator)
-write("results/BPSK/modulatedSignal.wav", samplingRate, product)
+write("results/QPSK/message.wav", samplingRate, modulator)
+write("results/QPSK/modulatedSignal.wav", samplingRate, product)
 
 # Show plots
 plt.subplot(3,2,1)
-plt.title('BPSK Modulation')
+plt.title('QPSK Modulation')
 plt.plot(t[0:3000], modulator[0:3000],'g')
 # plt.plot(t[0:3000], I[0:3000],'b')
 # plt.plot(t[0:3000], Q[0:3000],'r')
@@ -104,7 +127,6 @@ plt.xlabel('Message signal')
 
 plt.subplot(3,2, 2)
 plt.plot(f[0:1500], modulator_spectrum[0:1500])
-# plt.plot(f, modulator_spectrum)
 plt.ylabel('Amplitude')
 plt.xlabel('Frequency')
 
@@ -125,7 +147,6 @@ plt.xlabel('AM signal')
 
 plt.subplot(3,2,6)
 plt.plot(f[9800:15200], product_spectrum[9800:15200])
-# plt.plot(f, product_spectrum)
 plt.ylabel('Amplitude')
 plt.xlabel('Frequency')
 
@@ -135,8 +156,7 @@ fig = plt.gcf()
 
 # Save plot
 # plt.show()
-fig.savefig('results/BPSK/modulation.png', dpi=100)
-
+fig.savefig('results/QPSK/modulation.png', dpi=100)
 
 
 # # --------------- Symbol detection before filters... ------------------
@@ -210,7 +230,7 @@ fig.savefig('results/BPSK/modulation.png', dpi=100)
 # plt.xlabel('Real')
 
 # # plt.show()
-# fig3.savefig('results/BPSK/emitted_symbols.png', dpi=100)
+# fig3.savefig('results/QPSK/emitted_symbols.png', dpi=100)
 
 # print("Number of bits received : ", len(bits_received))
 # print("Bits received : ", "".join([str(i) for i in bits_received] ))
