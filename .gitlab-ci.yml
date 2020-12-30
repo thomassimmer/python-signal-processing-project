@@ -4,6 +4,8 @@ testpython36:
   - apt-get update -qy
   - pip install .
   - mkdir results
+  - mkdir results/BPSK
+  - mkdir results/AM
   - python -m unittest discover
   
 testpython35:
@@ -12,5 +14,7 @@ testpython35:
   - apt-get update -qy
   - pip install .
   - mkdir results
+  - mkdir results/BPSK
+  - mkdir results/AM
   - python -m unittest discover
   
