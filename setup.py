@@ -2,12 +2,12 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='python-test-project',
+    name='python-signal-processing-project',
     version='1.0.0',
     author='Thomas Simmer',
     description=("A Python project to understand signal processing basics."),
     license="BSD",
-    url="https://gitlab.com/thomas_simmer/python-test-project",
+    url="https://gitlab.com/thomas_simmer/python-signal-processing-project",
     classifiers=[
         "License :: OSI Approved :: BSD License",
         "Intended Audience :: Developers",
