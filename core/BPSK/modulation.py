@@ -28,15 +28,15 @@ t = np.arange(beginTime, endTime, samplingInterval)
 
 tpCount = len(t)
 values = np.arange(int(tpCount))
-timePeriod = tpCount/samplingRate
-f = values/timePeriod
- 
+timePeriod = tpCount / samplingRate
+f = values / timePeriod
+
 # Generate carrier
-carrier = A_c*np.cos(2*np.pi*f_c*t)
+carrier = A_c * np.cos(2 * np.pi * f_c * t)
 
 # Generate bits from message
 message_to_transmit = "Hello The World ! BPSK is great. "
-bits_to_transmit =  helpers.tobits(message_to_transmit)
+bits_to_transmit = helpers.tobits(message_to_transmit)
 # print("Message to transmit : ", message_to_transmit)
 # print("Number of bits to transmit : ", len(bits_to_transmit))
 # print("Bits to transmit : ", "".join([str(i) for i in bits_to_transmit] ))
@@ -46,13 +46,13 @@ I, Q, I_channel, Q_channel = [], [], [], []
 
 # Generate symbols
 symbol_for_1 = np.exp(1j * 0)
-symbol_for_0 = np.exp(1j * (- np.pi))
+symbol_for_0 = np.exp(1j * (-np.pi))
 k = 0
 for i in t:
     # apply phase shift of PI every T if bit == 0
-    if (i < (k + 1) * T_m):
-        if (len(bits_to_transmit) > k):
-            if (bits_to_transmit[k] == 1):                
+    if i < (k + 1) * T_m:
+        if len(bits_to_transmit) > k:
+            if bits_to_transmit[k] == 1:
                 I.append(symbol_for_1.real)
                 Q.append(symbol_for_1.imag)
             else:
@@ -83,60 +83,59 @@ product = A_c * np.cos(2 * np.pi * f_c * t) * (1 + modulation_index * modulator)
 product = filters.butter_bandpass_filter(product, 9000, 11000, samplingRate)
 
 # Generate spectra
-carrier_spectrum = np.fft.fft(carrier)/len(carrier)
-modulator_spectrum = np.fft.fft(modulator)/len(modulator)
-product_spectrum = np.fft.fft(product)/len(product)
+carrier_spectrum = np.fft.fft(carrier) / len(carrier)
+modulator_spectrum = np.fft.fft(modulator) / len(modulator)
+product_spectrum = np.fft.fft(product) / len(product)
 
 # Write wav files
 write("results/BPSK/message.wav", samplingRate, modulator)
 write("results/BPSK/modulatedSignal.wav", samplingRate, product)
 
 # Show plots
-plt.subplot(3,2,1)
-plt.title('BPSK Modulation')
-plt.plot(t[0:3000], modulator[0:3000],'g')
+plt.subplot(3, 2, 1)
+plt.title("BPSK Modulation")
+plt.plot(t[0:3000], modulator[0:3000], "g")
 # plt.plot(t[0:3000], I[0:3000],'b')
 # plt.plot(t[0:3000], Q[0:3000],'r')
 # plt.plot(t[0:3000], I_channel[0:3000],'b')
 # plt.plot(t[0:3000], Q_channel[0:3000],'r')
-plt.ylabel('Amplitude')
-plt.xlabel('Message signal')
+plt.ylabel("Amplitude")
+plt.xlabel("Message signal")
 
-plt.subplot(3,2, 2)
+plt.subplot(3, 2, 2)
 plt.plot(f[0:1500], modulator_spectrum[0:1500])
 # plt.plot(f, modulator_spectrum)
-plt.ylabel('Amplitude')
-plt.xlabel('Frequency')
+plt.ylabel("Amplitude")
+plt.xlabel("Frequency")
 
-plt.subplot(3,2,3)
-plt.plot(t, carrier, 'r')
-plt.ylabel('Amplitude')
-plt.xlabel('Carrier signal')
+plt.subplot(3, 2, 3)
+plt.plot(t, carrier, "r")
+plt.ylabel("Amplitude")
+plt.xlabel("Carrier signal")
 
-plt.subplot(3,2,4)
+plt.subplot(3, 2, 4)
 plt.plot(f[9950:10050], carrier_spectrum[9950:10050])
-plt.ylabel('Amplitude')
-plt.xlabel('Frequency')
+plt.ylabel("Amplitude")
+plt.xlabel("Frequency")
 
-plt.subplot(3,2,5)
+plt.subplot(3, 2, 5)
 plt.plot(t, product, color="purple")
-plt.ylabel('Amplitude')
-plt.xlabel('AM signal')
+plt.ylabel("Amplitude")
+plt.xlabel("AM signal")
 
-plt.subplot(3,2,6)
+plt.subplot(3, 2, 6)
 plt.plot(f[9800:15200], product_spectrum[9800:15200])
 # plt.plot(f, product_spectrum)
-plt.ylabel('Amplitude')
-plt.xlabel('Frequency')
+plt.ylabel("Amplitude")
+plt.xlabel("Frequency")
 
 plt.subplots_adjust(hspace=1)
-plt.rc('font', size=15)
+plt.rc("font", size=15)
 fig = plt.gcf()
 
 # Save plot
 # plt.show()
-fig.savefig('results/BPSK/modulation.png', dpi=100)
-
+fig.savefig("results/BPSK/modulation.png", dpi=100)
 
 
 # # --------------- Symbol detection before filters... ------------------
@@ -188,7 +187,7 @@ fig.savefig('results/BPSK/modulation.png', dpi=100)
 #             bits_received.append(0)
 #         elif (np.linalg.norm(symbol_for_1 - symbols[-1]) < threshold_radius):
 #             bits_received.append(1)
-            
+
 # fig3 = plt.figure(3)
 # axes = plt.gca()
 # axes.set_xlim([-2,2])

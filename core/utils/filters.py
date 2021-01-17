@@ -1,12 +1,13 @@
 from scipy.signal import butter, filtfilt, lfilter
 
-# NOTE : On the use of lfilter or filtfilt https://dsp.stackexchange.com/questions/19084/applying-filter-in-scipy-signal-use-lfilter-or-filtfilt 
+# NOTE : On the use of lfilter or filtfilt https://dsp.stackexchange.com/questions/19084/applying-filter-in-scipy-signal-use-lfilter-or-filtfilt
+
 
 def butter_bandpass(lowcut, highcut, fs, order=5):
     nyq = 0.5 * fs
     low = lowcut / nyq
     high = highcut / nyq
-    b, a = butter(order, [low, high], btype='band')
+    b, a = butter(order, [low, high], btype="band")
     return b, a
 
 
@@ -19,7 +20,7 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
 def butter_lowpass(cutoff, fs, order=5):
     nyq = 0.5 * fs
     normal_cutoff = cutoff / nyq
-    b, a = butter(order, normal_cutoff, btype='low')
+    b, a = butter(order, normal_cutoff, btype="low")
     return b, a
 
 
@@ -32,7 +33,7 @@ def butter_lowpass_filter(data, cutoff, fs, order=5):
 def butter_highpass(cutoff, fs, order=5):
     nyq = 0.5 * fs
     normal_cutoff = cutoff / nyq
-    b, a = butter(order, normal_cutoff, btype='high')
+    b, a = butter(order, normal_cutoff, btype="high")
     return b, a
 
 

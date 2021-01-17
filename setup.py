@@ -1,10 +1,9 @@
-
 from setuptools import setup, find_packages
 
 setup(
-    name='python-signal-processing-project',
-    version='1.0.0',
-    author='Thomas Simmer',
+    name="python-signal-processing-project",
+    version="1.0.0",
+    author="Thomas Simmer",
     description=("A Python project to understand signal processing basics."),
     license="BSD",
     url="https://gitlab.com/thomas_simmer/python-signal-processing-project",
@@ -16,9 +15,5 @@ setup(
     ],
     keywords="python scipy numpy",
     packages=find_packages(),
-    install_requires=[
-        'numpy',
-        'scipy',
-        'matplotlib'
-    ],
+    install_requires=["numpy", "scipy", "matplotlib"],
 )
